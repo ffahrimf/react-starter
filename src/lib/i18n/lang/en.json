@@ -1,0 +1,4 @@
+{
+    "delete_confirmation": "Are you sure you want to delete this data? This action cannot be undone.",
+  "logout_confirmation": "Are you sure you want to log out? This action cannot be undone."
+}

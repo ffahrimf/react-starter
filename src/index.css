@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-primary-50: #efefff;
+  --color-primary-100: #e0e0ff;
+  --color-primary-200: #c2c2ff;
+  --color-primary-300: #9999ff;
+  --color-primary-400: #7070ff;
+  --color-primary-500: #4d4dff;
+  --color-primary-600: #3c3cf5;
+  --color-primary-700: #2e2ed9;
+  --color-primary-800: #2525b3;
+  --color-primary-900: #1e1e8a;
+  --color-primary-950: #131354;
+  --color-primary: var(--color-primary-500);
+
+  --color-secondary-50: #f9fef2;
+  --color-secondary-100: #f1fce2;
+  --color-secondary-200: #e2f8c1;
+  --color-secondary-300: #d1f39a;
+  --color-secondary-400: #bced68;
+  --color-secondary-500: #a5e300;
+  --color-secondary-600: #87c900;
+  --color-secondary-700: #679d00;
+  --color-secondary-800: #4d7700;
+  --color-secondary-900: #3b5c00;
+  --color-secondary-950: #223500;
+  --color-secondary: var(--color-secondary-500);
+
+  --color-dark-50: #fafafa;
+  --color-dark-100: #f4f4f5;
+  --color-dark-200: #e4e4e7;
+  --color-dark-300: #d4d4d8;
+  --color-dark-400: #a1a1aa;
+  --color-dark-500: #71717a;
+  --color-dark-600: #52525b;
+  --color-dark-700: #3f3f46;
+  --color-dark-800: #27272a;
+  --color-dark-900: #18181b;
+  --color-dark-950: #09090b;
+
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 640px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-desktop: 1280px;
+}
+
+:root {
+  --font-display--font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  --font-display--font-variation-settings: "opsz" 32;
+  text-rendering: optimizeLegibility;
+  --webkit-font-smoothing: antialiased;
+  --moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Inter Tight", sans-serif;
+}

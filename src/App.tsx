@@ -16,6 +16,8 @@ import AppLayout from "./layout/AppLayout";
 // Lazy load semua halaman/views
 const Login = lazy(() => import("./pages/LoginPage"));
 const Overview = lazy(() => import("./pages/Overview"));
+const Event = lazy(() => import("./pages/Event"));
+const User = lazy(() => import("./pages/User"));
 
 function App() {
   return (
@@ -24,19 +26,30 @@ function App() {
         <ScrollToTop />
         <Suspense fallback={<Splash />}>
           <Routes>
-            {/* Protected Route */}
-            <Route element={<ProtectedRoute />}>
-              <Route element={<AppLayout />}>
-                <Route index path="/" element={<Overview />} />
-              </Route>
-            </Route>
-
-            {/* Guest Route */}
+            {/* Guest Route (Hanya untuk yang belum login) */}
             <Route element={<GuestRoute />}>
               <Route path="/auth/login" element={<Login />} />
             </Route>
 
-            {/* Fallback Route */}
+            {/* --- Protected Routes --- */}
+            <Route element={<AppLayout />}>
+              {/* Rute yang bisa diakses SEMUA role (selama sudah login) */}
+              <Route element={<ProtectedRoute />}>
+                <Route index path="/" element={<Overview />} />
+              </Route>
+
+              {/* Rute yang hanya bisa diakses oleh 'ADMIN' */}
+              <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+                <Route path="/event" element={<Event />} />
+              </Route>
+
+              {/* Rute yang HANYA bisa diakses oleh 'SUPERADMIN' */}
+              <Route element={<ProtectedRoute allowedRoles={["SUPERADMIN"]} />}>
+                <Route path="/user" element={<User />} />
+              </Route>
+            </Route>
+
+            {/* Fallback */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

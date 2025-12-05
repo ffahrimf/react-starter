@@ -1,4 +1,4 @@
-import type { TLoginSchema } from "../lib/validators";
+import type { TLoginSchema } from "../services/auth/validators";
 
 export interface RoleIF {
   id: number;
@@ -6,9 +6,9 @@ export interface RoleIF {
 }
 
 export interface AuthState {
-  token: string | null;
-  role: string | null;
-  guid: string | null;
+  token: string | undefined;
+  role: string | undefined;
+  guid: string | undefined;
   profile: any;
   permissions: any[];
 }

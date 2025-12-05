@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../components/base/Button";
 import { useDispatch } from "react-redux";
-import { logout } from "../store/auth";
+import { logout } from "../slices/authSlice";
 import { ThemeToggleButton } from "../common/ThemeToggleButton";
 
 const Overview: React.FC = () => {

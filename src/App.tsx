@@ -2,60 +2,57 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // Komponen pelindung
-import GuestRoute from "./components/routes/Guest";
-import ProtectedRoute from "./components/routes/Protected";
+import GuestRoute from "./routes/Guest";
+import ProtectedRoute from "./routes/Protected";
 
-// Layout
-import NotFound from "./pages/NotFound";
-
-//Loading Screen
+// Common Components
 import { ScrollToTop } from "./common/ScrollToTop";
-import Splash from "./components/shared/Splash";
+import Splash from "./common/Splash";
 import AppLayout from "./layout/AppLayout";
+import NotFound from "./pages/NotFound";
+import Unauthorized from "./pages/UnaUthorized";
 
-// Lazy load semua halaman/views
-const Login = lazy(() => import("./pages/LoginPage"));
+// Priotity Imports
+import Login from "./pages/LoginPage";
+
+// Lazy-loaded Pages
 const Overview = lazy(() => import("./pages/Overview"));
 const Event = lazy(() => import("./pages/Event"));
 const User = lazy(() => import("./pages/User"));
 
-function App() {
+const withSuspense = (Component: React.LazyExoticComponent<any>) => (
+  <Suspense fallback={<Splash />}>
+    <Component />
+  </Suspense>
+);
+
+export default function App() {
   return (
     <>
       <BrowserRouter>
         <ScrollToTop />
-        <Suspense fallback={<Splash />}>
-          <Routes>
-            {/* Guest Route (Hanya untuk yang belum login) */}
-            <Route element={<GuestRoute />}>
-              <Route path="/auth/login" element={<Login />} />
-            </Route>
-
-            {/* --- Protected Routes --- */}
+        <Routes>
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
-              {/* Rute yang bisa diakses SEMUA role (selama sudah login) */}
-              <Route element={<ProtectedRoute />}>
-                <Route index path="/" element={<Overview />} />
-              </Route>
-
-              {/* Rute yang hanya bisa diakses oleh 'ADMIN' */}
-              <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
-                <Route path="/event" element={<Event />} />
-              </Route>
-
-              {/* Rute yang HANYA bisa diakses oleh 'SUPERADMIN' */}
-              <Route element={<ProtectedRoute allowedRoles={["SUPERADMIN"]} />}>
-                <Route path="/user" element={<User />} />
-              </Route>
+              <Route index path="/" element={<Overview />} />
+              <Route path="/event" element={withSuspense(Event)} />
+              <Route path="/user" element={withSuspense(User)} />
             </Route>
+          </Route>
 
-            {/* Fallback */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+          {/* Guest Routes */}
+          <Route element={<GuestRoute />}>
+            <Route path="/auth/login" element={<Login />} />
+          </Route>
+
+          {/* Unauthorized Routes */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+
+          {/* Fallback Route */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </>
   );
 }
-
-export default App;

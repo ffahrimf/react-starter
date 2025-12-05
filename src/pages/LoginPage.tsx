@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginForm } from "../components/ui/auth/LoginForm";
+import { LoginForm } from "../components/auth/LoginForm";
 import ThemeTogglerTwo from "../common/ThemeTogglerTwo";
 
 const LoginPage: React.FC = () => {

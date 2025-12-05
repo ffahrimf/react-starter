@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import useApi from "../../../hooks/use-api";
-import { useEncrypt } from "../../../hooks/use-helper";
-import type { LoginResponse, ReqIF } from "../../../interface/auth.interface";
-import { LoginSchema, type TLoginSchema } from "../../../lib/validators";
-import type { AppDispatch } from "../../../store";
-import { login } from "../../../store/auth";
+import useApi from "../../hooks/use-api";
+import { useEncrypt } from "../../hooks/use-helper";
+import type { LoginResponse, ReqIF } from "../../interface/auth.interface";
+import { LoginSchema, type TLoginSchema } from "../../services/auth/validators";
+import type { AppDispatch } from "../../store";
+import { login } from "../../slices/authSlice";
 
 export const LoginForm: React.FC = () => {
   const [generalError, setGeneralError] = useState<string>("");

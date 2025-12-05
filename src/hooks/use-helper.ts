@@ -1,32 +1,57 @@
 import CryptoES from "crypto-es";
-import type {
-  EncryptedData,
-  GenericObject,
-} from "../interface/composable.interface";
+import type { GenericObject } from "../interface/composable.interface";
 import day from "../lib/day";
 
-export const useEncrypt = (plaintext: string): EncryptedData | null => {
+export const useEncrypt = (plaintext: string) => {
   if (!plaintext) {
     return null;
   }
-  const secretKey = import.meta.env.VITE_API_KEY as string;
+  const apiKey = import.meta.env.VITE_PUBLIC_API_KEY as string;
   const iv = CryptoES.lib.WordArray.random(16);
-  const encrypted = CryptoES.AES.encrypt(plaintext, secretKey, { iv: iv });
-  return { iv: iv.toString(), ciphertext: encrypted.toString() };
+  const encrypted = CryptoES.AES.encrypt(
+    plaintext,
+    CryptoES.enc.Hex.parse(apiKey),
+    {
+      iv: iv,
+      padding: CryptoES.pad.Pkcs7,
+      mode: CryptoES.mode.CBC,
+    },
+  );
+  const encryptedBase64 = CryptoES.enc.Base64.stringify(
+    iv.concat(encrypted.ciphertext!),
+  );
+
+  return encryptedBase64;
 };
 
-export const useDecrypt = (data: string | null | undefined): string | null => {
-  if (!data || data === "null") {
-    return null;
+export const useDecrypt = (encryptedText: string) => {
+  try {
+    const fullCipher = CryptoES.enc.Base64.parse(encryptedText);
+
+    const iv = CryptoES.lib.WordArray.create(fullCipher.words.slice(0, 4), 16);
+    const ciphertext = CryptoES.lib.WordArray.create(fullCipher.words.slice(4));
+
+    const cipherParams = CryptoES.lib.CipherParams.create({
+      ciphertext: ciphertext,
+    });
+
+    const apiKey = import.meta.env.VITE_PUBLIC_API_KEY as string;
+
+    const decrypted = CryptoES.AES.decrypt(
+      cipherParams,
+      CryptoES.enc.Hex.parse(apiKey),
+      {
+        iv: iv,
+        padding: CryptoES.pad.Pkcs7,
+        mode: CryptoES.mode.CBC,
+      },
+    );
+
+    return decrypted.toString(CryptoES.enc.Utf8);
+  } catch (error) {
+    console.error(error);
+    return;
   }
-  const encrypted: EncryptedData = JSON.parse(data);
-  const ciphertext = encrypted.ciphertext;
-  const iv = encrypted.iv;
-  const secretKey = import.meta.env.VITE_API_KEY as string;
-  const decrypted = CryptoES.AES.decrypt(ciphertext, secretKey, {
-    iv: CryptoES.enc.Hex.parse(iv),
-  });
-  return decrypted.toString(CryptoES.enc.Utf8);
 };
 
 export const useQuery = (obj: Record<string, any>): string => {

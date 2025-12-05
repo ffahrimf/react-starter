@@ -8,7 +8,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import persistedAuthReducer from "./store/auth";
+import persistedAuthReducer from "./slices/authSlice";
 
 export const store = configureStore({
   reducer: {

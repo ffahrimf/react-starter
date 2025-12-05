@@ -27,7 +27,8 @@ class useApi {
   private setupInterceptors() {
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token = useDecrypt(Cookies.get("hAS-aTH"));
+        const encryptedToken = Cookies.get("hAS-aTH");
+        const token = encryptedToken ? useDecrypt(encryptedToken) : null;
         if (token) {
           config.headers = config.headers ?? {};
           config.headers["Authorization"] = `Bearer ${token}`;

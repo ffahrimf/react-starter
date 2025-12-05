@@ -2,13 +2,12 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { useDecrypt } from "../hooks/use-helper";
 import type { AuthState } from "../interface/auth.interface";
 
 const initialState: AuthState = {
-  token: useDecrypt(Cookies.get("hAS-aTH")),
-  role: useDecrypt(Cookies.get("as-mhusqi")),
-  guid: useDecrypt(Cookies.get("glbl-unq-hr")),
+  token: Cookies.get("hAS-aTH"),
+  role: Cookies.get("as-mhusqi"),
+  guid: Cookies.get("glbl-unq-hr"),
   profile: null,
   permissions: [],
 };
@@ -26,9 +25,9 @@ export const auth = createSlice({
     },
 
     logout: (state) => {
-      state.token = null;
-      state.profile = null;
-      state.role = null;
+      state.token = undefined;
+      state.profile = undefined;
+      state.role = undefined;
       Cookies.remove("hAS-aTH");
       Cookies.remove("as-mhusqi");
       Cookies.remove("glbl-unq-hr");
